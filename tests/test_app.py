@@ -86,6 +86,14 @@ class AnalysisTests(unittest.TestCase):
         b = analyze(item(), history() + [{'id':'123','at':iso(NOW + timedelta(hours=4)),'price':999999,'listed':1}], fee_config())
         self.assertEqual(a, b)
 
+    def test_rounded_margin_cannot_cross_signal_threshold(self):
+        cfg = fee_config()
+        cfg['fee'] = {'confirmed':True, 'sale_rate':.0455, 'listing_rate':0, 'fixed_per_unit':0}
+        points = [{**p, 'price':22000 if n < 168 else 20000} for n,p in enumerate(history())]
+        result = analyze(item(20000), points, cfg)
+        self.assertEqual(result['net_margin_pct'], 5.0)
+        self.assertEqual(result['status'], 'watch')
+
     def test_hourly_weighting(self):
         raw = history()
         duplicate = {**raw[-1], 'at': '2026-10-21T09:00:10Z'}

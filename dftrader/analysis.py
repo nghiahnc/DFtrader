@@ -60,7 +60,8 @@ def analyze(item, history, config):
     net_rate = Decimal(1) - Decimal(str(fee["sale_rate"])) - Decimal(str(fee["listing_rate"]))
     fixed = Decimal(str(fee["fixed_per_unit"]))
     breakeven = int(((Decimal(item["price"]) + fixed) / net_rate).to_integral_value(rounding=ROUND_CEILING)) if fee["confirmed"] else None
-    margin = float(((Decimal(target) * net_rate - fixed - item["price"]) / item["price"] * 100).quantize(Decimal('.01'), rounding=ROUND_HALF_UP)) if fee["confirmed"] and target else None
+    raw_margin = (Decimal(target) * net_rate - fixed - item["price"]) / item["price"] * 100 if fee["confirmed"] and target else None
+    margin = float(raw_margin.quantize(Decimal('.01'), rounding=ROUND_HALF_UP)) if raw_margin is not None else None
     reasons = []
     status = "observe"
     if not ready:
@@ -72,7 +73,7 @@ def analyze(item, history, config):
             reasons.append("Biến động vượt ngưỡng theo dõi.")
         elif discount >= config["analysis"]["min_discount_pct"] and trend is not None and trend >= -3 and item["listed"] > 0:
             status = "watch"
-            if fee["confirmed"] and margin >= config["analysis"]["min_net_margin_pct"] and week_ready:
+            if fee["confirmed"] and raw_margin >= Decimal(str(config["analysis"]["min_net_margin_pct"])) and week_ready:
                 status = "opportunity"
     if not week_ready:
         reasons.append("Chưa đủ độ phủ lịch sử 7 ngày để bật cơ hội sau phí.")
