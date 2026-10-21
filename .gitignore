@@ -1,0 +1,11 @@
+__pycache__/
+.venv/
+.env
+.env.*
+!.env.example
+.source-inspect.html
+.detail-inspect.html
+.local/
+*.log
+node_modules/
+.qa*.html

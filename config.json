@@ -1,0 +1,5 @@
+{
+  "fee": {"confirmed": false, "sale_rate": 0, "listing_rate": 0, "fixed_per_unit": 0},
+  "analysis": {"min_discount_pct": 5, "min_net_margin_pct": 5, "max_volatility_pct": 12, "min_hours": 20, "min_7d_hours": 120, "max_source_age_hours": 3},
+  "collection": {"request_delay_seconds": 1, "max_pages": 20, "retention_days": 30}
+}

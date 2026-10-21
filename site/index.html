@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Theo dõi giá đạn Delta Force, lịch sử thị trường và cơ hội sau phí từ dữ liệu DFLoadout.">
+  <meta name="color-scheme" content="light">
+  <title>DFTrader — Trạm theo dõi thị trường</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Đến nội dung chính</a>
+  <header class="topbar"><a class="brand" href="./" aria-label="DFTrader trang chủ"><span class="brand-mark" aria-hidden="true">DF</span><span>DF<span class="brand-light">TRADER</span><small>DELTA FORCE MARKET INTELLIGENCE</small></span></a><nav aria-label="Điều hướng"><a href="#market" class="nav-active">Thị trường</a><a href="#method">Phương pháp</a><a href="https://dfloadout.gg/cho-dau-gia?category=5&amp;sort=listed-desc" target="_blank" rel="noopener noreferrer">DFLoadout ↗</a></nav><span class="readonly">Chế độ chỉ xem</span></header>
+  <main id="main">
+    <section class="intro"><div><p class="eyebrow"><span class="dot"></span> TRẠM QUAN SÁT / ĐẠN DƯỢC</p><h1>Đọc thị trường.<br><span>Quyết định có cơ sở.</span></h1><p class="lede">Giá đạn, biến động và cơ hội sau phí — trong một góc nhìn.<br class="desktop"> Dữ liệu từ DFLoadout, kiểm tra khoảng mỗi 30 phút.</p></div><div class="sync-box"><span class="eyebrow">LẦN PHÂN TÍCH THÀNH CÔNG</span><strong id="analysis-time">Đang tải…</strong><span id="source-time">Đang kiểm tra thời điểm nguồn</span><span id="freshness" class="pill neutral">Đang tải dữ liệu</span></div></section>
+    <div id="system-banner" class="banner" role="status" aria-live="polite">Đang tải báo cáo gần nhất…</div>
+    <section class="metrics" aria-label="Tổng quan thị trường">
+      <article><span class="metric-label">Đạn được theo dõi <span aria-hidden="true">↗</span></span><strong id="count">—</strong><small>Toàn bộ nhóm đạn từ nguồn</small></article>
+      <article><span class="metric-label">Giá thấp hơn trung vị <span aria-hidden="true">↓</span></span><strong id="below">—</strong><small>So với lịch sử giá 24 giờ</small></article>
+      <article><span class="metric-label">Cơ hội sau phí <span aria-hidden="true">◎</span></span><strong id="opportunities">—</strong><small id="fee-caption">Chờ xác nhận cách tính phí</small></article>
+      <article><span class="metric-label">Độ phủ lịch sử <span aria-hidden="true">◷</span></span><strong id="coverage">—</strong><small>Giờ quan sát / vật phẩm có giá</small></article>
+    </section>
+    <section class="workspace" id="market">
+      <div class="market-panel panel"><div class="section-top"><div><p class="eyebrow">MARKET WATCH</p><h2>Bảng theo dõi</h2></div><span id="result-count" class="subtle"></span></div>
+        <div class="filters"><label class="search-label"><span class="sr-only">Tìm tên đạn</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="search" type="search" placeholder="Tìm tên đạn, cỡ nòng…" autocomplete="off"></label><label><span class="sr-only">Lọc đánh giá</span><select id="status-filter"><option value="all">Tất cả đánh giá</option><option value="candidates">Ứng viên đáng xem</option><option value="opportunity">Cơ hội sau phí</option><option value="watch">Giá đáng theo dõi</option><option value="insufficient">Chưa đủ cơ sở</option><option value="unavailable">Không có người bán</option></select></label><label><span class="sr-only">Sắp xếp bảng</span><select id="sort"><option value="score">Điểm đánh giá ↓</option><option value="price">Giá tăng dần</option><option value="discount">Mức giảm giá ↓</option><option value="name">Tên A → Z</option></select></label></div>
+        <div id="market-list" class="market-list" aria-live="polite"><div class="empty">Đang tải dữ liệu thị trường…</div></div>
+        <div class="panel-foot"><span>Mức giảm so với trung vị 24 giờ. Đang rao = nguồn cung.</span><button id="show-more" hidden>Xem thêm vật phẩm</button></div>
+      </div>
+      <aside class="detail-panel panel" id="detail" aria-labelledby="detail-title"><div class="empty">Chọn một loại đạn để xem lịch sử và lý do đánh giá.</div></aside>
+    </section>
+    <section class="method panel" id="method"><div><p class="eyebrow">CÁCH ĐỌC BÁO CÁO</p><h2>Tín hiệu minh bạch.<br>Giới hạn rõ ràng.</h2><p id="method-thresholds">So sánh giá hiện tại với trung vị 24 giờ và 7 ngày. Chỉ đánh giá khi lịch sử đủ độ phủ.</p></div><div class="method-grid"><article><span>01 / GIÁ & XU HƯỚNG</span><h3>Không chỉ nhìn cú giảm</h3><p>Kiểm tra mức giảm, biến động và xu hướng gần đây. Giá mục tiêu là tham khảo, không bảo đảm phục hồi.</p></article><article><span>02 / LỢI NHUẬN SAU PHÍ</span><h3>Xác nhận phí trước</h3><p>Chỉ bật cơ hội sau phí khi phí đã xác nhận và lịch sử đủ dài. Giá hòa vốn tính cả phí bán, phí rao và phí cố định được cấu hình.</p></article><article><span>03 / KHẢ NĂNG BÁN</span><h3>Chưa xác minh thanh khoản</h3><p>Lượng đang rao không phải khối lượng đã bán. Giá rao chạm mục tiêu chưa chứng minh giao dịch khớp.</p></article><article><span>04 / THỜI ĐIỂM DỮ LIỆU</span><h3>Ưu tiên dữ liệu hợp lệ</h3><p>Nguồn cập nhật khoảng mỗi giờ. Khi thu thập lỗi, giữ báo cáo tốt gần nhất và tạm ngừng cảnh báo mua.</p></article></div></section>
+  </main>
+  <footer><span class="footer-brand">DFTRADER <small>/ công cụ quan sát cá nhân</small></span><span>Độc lập với Delta Force & DFLoadout. Tự quyết định giao dịch.</span></footer>
+</body>
+</html>
