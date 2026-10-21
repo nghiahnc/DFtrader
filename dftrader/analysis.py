@@ -18,6 +18,13 @@ def validate_config(config):
     for value in config["analysis"].values():
         if not isinstance(value, (int, float)) or not math.isfinite(value) or value <= 0:
             raise ValueError("Analysis thresholds must be positive")
+    collection = config["collection"]
+    if type(collection["retention_days"]) is not int or not 1 <= collection["retention_days"] <= 30:
+        raise ValueError("Retention must be an integer from 1 to 30 days")
+    if type(collection["max_pages"]) is not int or not 1 <= collection["max_pages"] <= 100:
+        raise ValueError("Invalid page limit")
+    if not math.isfinite(collection["request_delay_seconds"]) or collection["request_delay_seconds"] < .5:
+        raise ValueError("Request delay must be at least half a second")
 
 
 def hourly(points, at):

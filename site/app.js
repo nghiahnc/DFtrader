@@ -21,7 +21,7 @@ function refreshHealth() {
   if (!notices.length) notices.push('Đã tính phí theo cấu hình. Các cơ hội vẫn chưa được xác minh tốc độ bán thực tế.');
   $('system-banner').textContent = notices.join(' ');
   $('system-banner').className = `banner${stale || failed ? ' error' : ''}`;
-  $('opportunities').textContent = stale || failed ? '—' : number(report.items.filter(i => i.status === 'opportunity').length);
+  $('opportunities').textContent = stale || failed || !report.fee_confirmed ? '—' : number(report.items.filter(i => i.status === 'opportunity').length);
 }
 
 function renderList() {
@@ -81,6 +81,7 @@ async function boot() {
       const button = event.target.closest('[data-id]');
       if (!button) return;
       selected = button.dataset.id; renderList(); renderDetail();
+      $('market-list').querySelector(`[data-id="${selected}"]`)?.focus({preventScroll:true});
       if (matchMedia('(max-width:800px)').matches) $('detail').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion:reduce)').matches ? 'instant' : 'smooth', block:'start'});
     });
     $('detail').addEventListener('click', event => {

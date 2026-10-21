@@ -185,6 +185,23 @@ class EmailTests(unittest.TestCase):
             self.assertEqual(read_json(root / 'site/data/report.json'), report)
             self.assertFalse((root/'state/alerts.json').exists())
 
+    def test_success_sends_only_owner_and_persists_public_state(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            write_json(root / 'site/data/report.json', self.report())
+            write_json(root / 'site/data/status.json', {'ok':True})
+            env = {'SMTP_USER':'sender@example.test','SMTP_APP_PASSWORD':'PRIVATE_PASSWORD','ALERT_EMAIL':'owner@example.test'}
+            from unittest.mock import MagicMock
+            smtp = MagicMock()
+            smtp.__enter__.return_value = smtp
+            with patch('builtins.print'):
+                self.assertTrue(notify(root, env, lambda *a, **k:smtp, NOW))
+            self.assertEqual(smtp.send_message.call_args.kwargs['to_addrs'], ['owner@example.test'])
+            text = (root / 'state/alerts.json').read_text()
+            self.assertNotIn('example.test', text)
+            self.assertNotIn('PRIVATE_PASSWORD', text)
+            self.assertEqual(select_alerts(self.report(), {'ok':True}, json.loads(text), NOW), [])
+
 
 if __name__ == '__main__':
     unittest.main()

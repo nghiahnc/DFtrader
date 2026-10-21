@@ -27,5 +27,7 @@ jobs:
                   print('PUBLIC_MARKET_AVAILABLE:', page.locator('a.au-card-link').count())
               except Exception:
                   print('PUBLIC_MARKET_UNAVAILABLE: standard browser could not access listing; no challenge interaction attempted')
+                  browser.close()
+                  raise SystemExit(2)
               browser.close()
           PY

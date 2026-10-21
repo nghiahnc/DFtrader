@@ -62,12 +62,15 @@ def run(root, config, collector=None, now=None):
         return True
     except Exception as exc:
         # Exception bodies may contain URLs/credentials. Public output uses fixed text only.
+        response = getattr(exc, "response", None)
+        message = "Thu thập thất bại hoặc dữ liệu chưa đạt yêu cầu. Giữ báo cáo thành công gần nhất."
+        if response is not None and response.status_code == 403:
+            message = "Nguồn đang từ chối truy cập từ máy chủ thu thập (HTTP 403). Hiển thị báo cáo thành công gần nhất; chưa cập nhật tự động được."
         write_json(status_path, {"ok": False, "attempted_at": iso(now),
                                 "last_success_at": (previous or {}).get("generated_at"),
-                                "error": "Thu thập thất bại hoặc dữ liệu chưa đạt yêu cầu. Giữ báo cáo thành công gần nhất.",
+                                "error": message,
                                 "error_type": type(exc).__name__})
         print(f"Scan failed ({type(exc).__name__}); previous report retained.", file=sys.stderr)
-        response = getattr(exc, "response", None)
         if response is not None:
             print(f"Source HTTP status: {response.status_code}; challenge: {response.headers.get('cf-mitigated') == 'challenge'}", file=sys.stderr)
         return False
