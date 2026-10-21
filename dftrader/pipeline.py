@@ -67,6 +67,9 @@ def run(root, config, collector=None, now=None):
                                 "error": "Thu thập thất bại hoặc dữ liệu chưa đạt yêu cầu. Giữ báo cáo thành công gần nhất.",
                                 "error_type": type(exc).__name__})
         print(f"Scan failed ({type(exc).__name__}); previous report retained.", file=sys.stderr)
+        response = getattr(exc, "response", None)
+        if response is not None:
+            print(f"Source HTTP status: {response.status_code}; challenge: {response.headers.get('cf-mitigated') == 'challenge'}", file=sys.stderr)
         return False
 
 
